@@ -34,11 +34,16 @@ class App extends Component {
     this.setState({todos: todoslist})
   }
 
+  delete(todoToDelete) {
+    // console.log(todoToDelete);
+    
+  }
+
+
   render() {
     const { todos } = this.state;
     return (
       <div className="App">
-        <div className="header">To Do List</div>
         <TodoForm updateTodos={this.updateTodos} />
         <TodoList todos={todos}/>
       </div>
