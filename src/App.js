@@ -145,7 +145,7 @@ class App extends Component {
       todos, subTodos, noMoreTodos
     } = this.state;
     return (<div className="App" >
-      {noMoreTodos ? <div className="noMoreTodos"><span>No More Todos Ya 7ayawan</span><button onClick={() => this.setState({ noMoreTodos: false })}>OK</button></div> : ""}
+      {noMoreTodos ? <div className="noMoreTodos"><span>No More Todos</span><button onClick={() => this.setState({ noMoreTodos: false })}>OK</button></div> : ""}
       <TodoForm createTodos={
         this.createTodos
       }
