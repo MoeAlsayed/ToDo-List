@@ -70,78 +70,43 @@ export default class TodoForm extends Component {
     }
 
     render() {
-        return (<div className="container-form" >
-            <h3 > Add todo </h3>
-            <form onSubmit={
-                e => {
-                    e.preventDefault();
-                    this.addTodo();
-                    // to make the inputs empty 
-                    this.setState({
-                        title: "",
-                        description: '',
-                        dueDate: ''
-                    });
-                }
-            }>
-                <Input types={"text"}
-                    values={this.state.title}
-                    placeholders={"Title"}
-                    name={"title"}
-                    handleChange={this.handleChange}
-                    require={true}
-                />
-
-                <
-                    Input types={
-                        "text"
-                    }
-                    values={
-                        this.state.description
-                    }
-                    placeholders={
-                        "description"
-                    }
-                    name={
-                        "description"
-                    }
-                    handleChange={
-                        this.handleChange
-                    }
-                    require={
-                        true
-                    }
-                />
-
-                <
-                    Input types={
-                        "text"
-                    }
-                    handleFocus={
-                        this.handleFocus
-                    }
-                    handleBlur={
-                        this.handleBlur
-                    }
-                    values={
-                        this.state.dueDate
-                    }
-                    placeholders={
-                        "Due Date"
-                    }
-                    name={
-                        "dueDate"
-                    }
-                    handleChange={
-                        this.handleChange
-                    }
-                    require={
-                        true
-                    }
-                /> <
-            button type="submit" > Add < /button> < /
-            form > <
-            /div>
-                            )
+        return (< div className="container-form" >
+            <h3 > Add todo </h3> <form onSubmit={
+                        e => {
+                            e.preventDefault();
+                            this.addTodo();
+                            // to make the inputs empty 
+                            this.setState({
+                                title: "",
+                                description: '',
+                                dueDate: ''
+                            });
                         }
+                    } >
+                    <Input types={"text"}
+                        values={this.state.title}
+                        placeholders={"Title"}
+                        name={"title"}
+                        handleChange={this.handleChange}
+                        require={true}/>
+
+                    <Input types={"text"}
+                        values={this.state.description}
+                        placeholders={"description"}
+                        name={"description"}
+                        handleChange={this.handleChange}
+                        require={true}/>
+
+                    <Input types={"text"}
+                        handleFocus={this.handleFocus}
+                        handleBlur={this.handleBlur}
+                        values={this.state.dueDate}
+                        placeholders={"Due Date"}
+                        name={"dueDate"}
+                        handleChange={this.handleChange}
+                    require={true} /> <button type="submit"> Add </button>
+                        </form >
+                    </div>
+                    )
+                }
 }
