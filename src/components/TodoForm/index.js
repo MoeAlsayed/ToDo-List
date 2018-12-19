@@ -1,7 +1,6 @@
-import React, {
-    Component
-} from 'react';
+import React, {Component} from 'react';
 import Input from '../Input';
+import validateDueDate from '../../helper'
 
 
 export default class TodoForm extends Component {
@@ -22,24 +21,33 @@ export default class TodoForm extends Component {
             [e.target.name]: e.target.value
         })
     }
+
+
     // Hanle Focus to chage the type of the input from text to date type
-    handleFocus = (e) => {
-        e.target.type = "date"
-    }
+    // handleFocus = (e) => {
+    //     e.target.type = "date"
+    // }
 
     // Hanle Blur to chage the type of the input from date to text type
-    handleBlur = (e) => {
-        e.target.type = "text"
-    }
+    // handleBlur = (e) => {
+    //     e.target.type = "text"
+    // }
 
     // Add Todo function to add new todo 
     addTodo = () => {
-        const {
+        let {
             title,
             description,
             dueDate,
             status
         } = this.state;
+
+        //when invalid due date Then should show error message
+        dueDate = validateDueDate(dueDate);
+        if (!dueDate) {
+            alert("Due date should have the format 'dd.MM.yyyy HH:mm'");
+            return false;
+        }
 
         // get data from localstorage to create an Id for the new todo
         let todos = localStorage.getItem("todo");
@@ -51,7 +59,7 @@ export default class TodoForm extends Component {
             // console.log(todos);
 
         }
-        if (!title || !description || !dueDate) return
+        if (!title || !description) return
 
         // to avoid repeating id, get the last item id and increment it    
         const id = todos.length > 0 ? todos[todos.length - 1].id : 0;
@@ -67,20 +75,26 @@ export default class TodoForm extends Component {
 
         // call createTodos function and pass the new todo as a parameter
         this.props.createTodos(newTodo)
+        return true;
     }
 
     render() {
-        return (< div className="container-form" >
-            <h3 > Add todo </h3> <form onSubmit={
+        return (
+            < div className="container-form" style={{display:this.props.display?'block':'none'}}>
+             <h3 > Add todo </h3>
+                <form onSubmit={
                         e => {
                             e.preventDefault();
-                            this.addTodo();
-                            // to make the inputs empty 
-                            this.setState({
-                                title: "",
-                                description: '',
-                                dueDate: ''
-                            });
+                            if (this.addTodo()) {
+                                // to make the inputs empty 
+                                this.setState({
+                                    title: "",
+                                    description: '',
+                                    dueDate: '',
+                                    time: ''
+                                });
+                                this.props.onClose();                             
+                            }
                         }
                     } >
                     <Input types={"text"}
@@ -98,13 +112,16 @@ export default class TodoForm extends Component {
                         require={true}/>
 
                     <Input types={"text"}
-                        handleFocus={this.handleFocus}
-                        handleBlur={this.handleBlur}
+                        // handleFocus={this.handleFocus}
+                        // handleBlur={this.handleBlur}
                         values={this.state.dueDate}
-                        placeholders={"Due Date"}
+                        placeholders={"Due Date: dd.MM.yyyy HH:mm"}
                         name={"dueDate"}
                         handleChange={this.handleChange}
-                    require={true} /> <button type="submit"> Add </button>
+                        require={true} />
+
+                    <button type="submit"> Add </button>
+                    <button onClick={this.props.onClose}>close</button>
                         </form >
                     </div>
                     )

@@ -8,7 +8,8 @@ class App extends Component {
   state = {
     todos: [],
     subTodos: [],
-    noMoreTodos: false
+    noMoreTodos: false,
+    displayTodoForm:false
   }
 
   // to get the data from local Storge 
@@ -77,12 +78,12 @@ class App extends Component {
 
     // filter todos array and return items which has not same deleted element id 
     const filterTodo = todos.filter((todo) => {
-      return todo.id != id
+      return todo.id !== id
 
     })
     // set the new todos (filterTodo) in the state
     this.setState({
-      todos: filterTodo, subTodos: filterTodo
+      todos: filterTodo, subTodos: filterTodo.slice(0,5)
     })
 
     // set the new todos (filterTodo) to the localstorage
@@ -100,7 +101,7 @@ class App extends Component {
 
     // get the item from the state has a same id 
     const updatedTodos = todos.map((todo) => {
-      if (todo.id == id) {
+      if (todo.id === id) {
         // console.log(todo);
 
 
@@ -125,7 +126,7 @@ class App extends Component {
     const { todos } = this.state;
 
     const updatedTodos = todos.map((todo) => {
-      if (todo.id == id) {
+      if (todo.id === id) {
         todo.status = !status
       }
       return todo
@@ -139,26 +140,42 @@ class App extends Component {
     localStorage.setItem("todo", JSON.stringify(updatedTodos))
 
   }
+  openForm = () => {
+    this.setState({ displayTodoForm: true });
+    window.scrollTo(0, 0)
 
+  }
+  noMoreTodosClose = (e) => {
+    if(e.target.id==='page-cover' || e.target.id==='noMoreTodos-btn')
+      this.setState({ noMoreTodos: false })
+  }
   render() {
     const {
       todos, subTodos, noMoreTodos
     } = this.state;
+    
     return (<div className="App" >
-      {noMoreTodos ? <div className="noMoreTodos"><span>No More Todos</span><button onClick={() => this.setState({ noMoreTodos: false })}>OK</button></div> : ""}
-      <TodoForm createTodos={
-        this.createTodos
-      }
-      /> <TodoList todos={subTodos}
-        handleDelete={
-          this.handleDelete
-        }
-        handleUpdate={
-          this.handleUpdate
-        }
+      {noMoreTodos ?
+        <div id='page-cover' className='page-cover' onClick={this.noMoreTodosClose}>
+          <div className="noMoreTodos">
+            <span>No More Todos</span>
+            <button id='noMoreTodos-btn' onClick={this.noMoreTodosClose}>OK</button>
+          </div>
+        </div>
+        : ""}
+      <TodoForm
+        onClose={() => { this.setState({ displayTodoForm: false }) }}
+        display={this.state.displayTodoForm}
+        createTodos={this.createTodos}
+      />
+      
+      <TodoList todos={subTodos}
+        handleDelete={this.handleDelete}
+        handleUpdate={this.handleUpdate}
         handleDone={this.handleDone}
       />
-      <button onClick={this.showMore}>More</button>
+      <button className='open-form-btn' onClick={this.openForm}>+</button>
+      {todos.length<6?'':<button className='more-btn' onClick={this.showMore}>More</button>}
     </div>
     );
   }
